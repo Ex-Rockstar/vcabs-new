@@ -1,0 +1,54 @@
+<div class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4">Ride Requests</h2>
+
+    <!-- If there are ride requests -->
+    <div *ngIf="rideRequests && rideRequests.length > 0; else noRequests">
+      <ul class="space-y-4">
+        <li
+          *ngFor="let request of rideRequests"
+          class="border border-gray-200 rounded-lg p-4 flex justify-between items-center hover:shadow transition"
+        >
+          <!-- Left side info -->
+          <div>
+            <p class="font-semibold text-lg text-gray-800">
+              {{ request.passengerName }}
+            </p>
+            <p class="text-gray-600">
+              Pickup: <span class="font-medium">{{ request.pickupLocation }}</span>
+            </p>
+            <p class="text-gray-600">
+              Drop: <span class="font-medium">{{ request.dropLocation }}</span>
+            </p>
+            <p class="text-sm text-gray-400">
+              Requested at: {{ request.requestedAt | date: "short" }}
+            </p>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="space-x-2">
+            <button
+              (click)="acceptRequest(request.id)"
+              class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition"
+            >
+              Accept
+            </button>
+            <button
+              (click)="rejectRequest(request.id)"
+              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition"
+            >
+              Reject
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- If no ride requests -->
+    <ng-template #noRequests>
+      <p class="text-center text-gray-500 mt-20">
+        No ride requests at the moment 🚗💨
+      </p>
+    </ng-template>
+  </div>
+</div>

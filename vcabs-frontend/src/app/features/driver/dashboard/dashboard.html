@@ -1,0 +1,27 @@
+<div class="max-w-3xl mx-auto p-6 space-y-8">
+  <h1 class="text-3xl font-bold mb-6">Driver Dashboard</h1>
+
+  <section>
+    <app-availability-toggle
+      [(isAvailable)]="isOnline">
+    </app-availability-toggle>
+  </section>
+
+  <section>
+    <app-break-mode
+      [isOnBreak]="isOnBreak"
+      [breakReason]="breakReason"
+      (BreakMode)="onBreakModeChange($event)">
+    </app-break-mode>
+  </section>
+
+  <section>
+    <app-status-summary #statusLogger
+      [currentStatus]="currentStatus"
+      [currentTimestamp]="currentTimestamp"
+      [statusLogs]="statusLogs">
+    </app-status-summary>
+  </section>
+
+  <p class="text-lg">Current Status: <strong>{{ isOnline ? 'Online' : 'Offline' }}</strong></p>
+</div>
