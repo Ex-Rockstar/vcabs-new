@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -17,7 +18,8 @@ export class Login implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -65,14 +67,30 @@ export class Login implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      
-      // Simulate API call
-      setTimeout(() => {
-        console.log('Login form submitted:', this.loginForm.value);
-        this.isLoading = false;
-        // Navigate to dashboard or handle successful login
-        // this.router.navigate(['/dashboard']);
-      }, 2000);
+      const payload = {
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password
+      };
+      this.authService.login(payload).subscribe({
+        next: (res) => {
+          // Persist to session if not rememberMe
+          if (!this.loginForm.value.rememberMe) {
+            sessionStorage.setItem('token', res.token);
+            sessionStorage.setItem('role', res.role);
+            sessionStorage.setItem('email', res.email);
+          }
+          // Navigate by role
+          if (res.role === 'ADMIN') this.router.navigate(['/admin']);
+          else if (res.role === 'DRIVER') this.router.navigate(['/driver']);
+          else this.router.navigate(['/passenger']);
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
     } else {
       // Mark all fields as touched to show validation errors
       this.loginForm.markAllAsTouched();

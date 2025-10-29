@@ -60,7 +60,8 @@
               "buildTarget": "vcabs-frontend:build:production"
             },
             "development": {
-              "buildTarget": "vcabs-frontend:build:development"
+              "buildTarget": "vcabs-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

@@ -5,12 +5,15 @@ import { Register } from './register/register';
 import { ForgotPassword } from './forgot-password/forgot-password';
 import { CustomerRegister } from './customer-register/customer-register';
 import { DriverRegister } from './driver-register/driver-register';
+import { AdminRegister } from './admin-register/admin-register';
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'register/customer', component: CustomerRegister },
+  { path: 'register/passenger', component: CustomerRegister },
   { path: 'register/driver', component: DriverRegister },
+  { path: 'register/admin', component: AdminRegister },
   { path: 'forgot-password', component: ForgotPassword }
 ];
 
